@@ -8,6 +8,16 @@ def sq(num):
 def sqPrime(num):
     return lambda x: 2*x
 
+
+def isotherm():
+    return
+
+def pseudoIsotherm():
+    return
+
+
+
+
 print(rf.bisect(sq(45),0,100))
 print(rf.newton(sq(45),sqPrime(45),10))
 print(rf.secant(sq(45),0,100))

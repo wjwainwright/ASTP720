@@ -42,3 +42,33 @@ def linearInterpolate(xarr,yarr):
         return y0*(1-xd)+y1*xd
         
     return subFunc
+
+
+def cubicSpline(xarr,yarr):
+    
+    def subFunc(x):
+        import numpy as np
+        
+        #Checks boundary conditions
+        if x < xarr[0] or x > xarr[-1]:
+            print("X position out of bounds")
+            return
+        
+        #Gets nearest value in the xarr to sample x
+        arr = np.asarray(xarr) 
+        a = arr[(np.abs(arr - x)).argmin()]
+        
+        #Calculate second derivatives
+        p2prime = np.zeros(len(xarr))
+        i = len(xarr) - 2
+        while i > 0:
+            hi = xarr[i+1] - xarr[i]
+            p2prime[i] = (1/hi)*( (x-xarr[i])*p2prime[i+1] + (x-xarr[i+1])*p2prime[i] )
+            
+            i-=1
+        
+        
+        
+        return
+    
+    return subFunc
