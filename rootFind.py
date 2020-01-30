@@ -17,22 +17,24 @@ def bisect(func,a,b,threshold=0.0001):
     """
     
     c = (a+b)/2
+    count = 0
     
     while(True):
         if func(a) < 0 and func(b) < 0 :
             print("Both f(a) and f(b) are negative. Try again, buddy")
-            return
+            return 0,0
         elif func(a) > 0 and func(b) > 0 :
             print("Both f(a) and f(b) are positive. Try again, buddy")
-            return
+            return 0,0
         else:
             if func(a)*func(c) < 0 :
                 b = float(c)
             else:
                 a = float(c)
             c = (a+b)/2
+            count += 1
             if(abs(func(c)) < threshold):
-                return c
+                return c,count
 
 
 def newton(func,funcPrime,pos,threshold=0.0001):
@@ -49,9 +51,11 @@ def newton(func,funcPrime,pos,threshold=0.0001):
             Returns a float c where f(c) is within the threshold of zero.
     """
     
+    count = 0
     while(abs(func(pos)) > threshold):
         pos = pos - func(pos)/funcPrime(pos)
-    return pos
+        count += 1
+    return pos,count
 
 
 def secant(func,a,b,threshold=0.0001):
@@ -68,10 +72,12 @@ def secant(func,a,b,threshold=0.0001):
             Returns a float c where f(c) is within the threshold of zero.
     """
     
+    count = 0
     while(abs(func(b)) > threshold):
         temp = float(b)
         b = b - func(b) * ( (b-a)/(func(b)-func(a)) )
         a = float(temp)
-    return b
+        count += 1
+    return b,count
 
 

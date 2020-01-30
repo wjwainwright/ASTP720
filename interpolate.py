@@ -45,6 +45,18 @@ def linearInterpolate(xarr,yarr):
 
 
 def cubicSpline(xarr,yarr):
+    """
+    Cubic spline interpolation function
+    
+    Args:
+        xarr: Array of x values that is in the same order as the y value array
+        yarr: Array of y values that is in the same order as the x value array
+        
+    Returns:
+        Returns a function in the form f(x) which, when given an x value inside
+        the initial bounds of xarr and yarr, will return the y value according
+        to a cubic spline interpolation. If x is out of bounds it returns none
+    """
     
     def subFunc(x):
         import numpy as np
