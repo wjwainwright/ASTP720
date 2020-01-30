@@ -13,7 +13,7 @@ def sqPrime(num):
 
 
 def gaussianLens(xprime,lam,re,N0,D,a):
-    return lambda x: x*u.AU*( 1+ 1/(np.pi*a**2)*lam*re**2*N0*D*np.exp(-1*(x*u.AU/a)**2) ) - xprime
+    return lambda x: x*u.AU*( 1+ 1/(np.pi*a**2)*lam**2*re*N0*D*np.exp(-1*(x*u.AU/a)**2) ) - xprime
 
 def pseudoIsotherm(x):
     
@@ -74,7 +74,7 @@ xprimelist = np.arange(0,2,0.025)*u.AU
 xlist = []
 
 lam = 21*u.cm
-re = 2.817e-17*u.cm
+re = 2.817e-13*u.cm
 N0 = 0.01*u.pc*(u.cm)**-3
 D = 1*u.kpc
 a = 1*u.AU
@@ -85,7 +85,7 @@ for xprime in xprimelist:
     xlist.append(x)
 
 yprimelist = np.zeros(len(xlist))
-ylist = np.full(len(xprimelist),10)
+ylist = np.full(len(xprimelist),2e8)
 
 plt.figure("Gaussian Lens")
 plt.title("Gaussian Lens")
