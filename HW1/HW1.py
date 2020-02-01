@@ -15,9 +15,8 @@ def sqPrime(num):
 def gaussianLens(xprime,lam,re,N0,D,a):
     return lambda x: x*u.AU*( 1+ 1/(np.pi*a**2)*lam**2*re*N0*D*np.exp(-1*(x*u.AU/a)**2) ) - xprime
 
-def pseudoIsotherm(x):
-    
-    return
+def pseudoIsotherm(xprime,lam,re,rc,N0,D,a):
+    return lambda x: x*u.AU*( 1+ 1/(np.pi*a**2)*lam**2*re*N0*D*(1+(x*u.AU/rc)**2)**-0.5 ) - xprime
 
 def pseudoIsothermFWHM(x):
     return (1+x**2)**-0.5 - 0.5
@@ -73,6 +72,7 @@ plt.savefig("Threshold_Count_Plot.pdf")
 xprimelist = np.arange(0,2,0.025)*u.AU
 xlist = []
 
+#Variables
 lam = 21*u.cm
 re = 2.817e-13*u.cm
 N0 = 0.01*u.pc*(u.cm)**-3
@@ -81,7 +81,7 @@ a = 1*u.AU
 
 for xprime in xprimelist:
     func = gaussianLens(xprime,lam,re,N0,D,a)
-    x,count = rf.bisect(func,0,1000,threshold=0.0001*u.AU)
+    x,count = rf.bisect(func,-1,5,threshold=0.0001*u.AU)
     xlist.append(x)
 
 yprimelist = np.zeros(len(xlist))
@@ -89,9 +89,43 @@ ylist = np.full(len(xprimelist),2e8)
 
 plt.figure("Gaussian Lens")
 plt.title("Gaussian Lens")
-plt.xlabel("x'")
-plt.yticks([])
+plt.xlabel("x' (AU)")
+plt.ylabel("D (AU)")
 for i in range(0,len(xlist)):
     xl = [xprimelist[i]/u.AU,xlist[i]]
     yl = [yprimelist[i],ylist[i]-np.exp(-1*((xlist[i]-1)/0.25)**2)] #The gaussian here is just for visual
     plt.plot(xl,yl,color='blue')
+plt.savefig("GaussianLens.pdf")
+plt.savefig("GaussianLens.png")
+
+#Number 5
+    
+xprimelist = np.arange(0,2,0.025)*u.AU
+xlist = []
+
+#Variables
+rc = 1*u.AU
+lam = 21*u.cm
+re = 2.817e-13*u.cm
+N0 = 0.01*u.pc*(u.cm)**-3
+D = 1*u.kpc
+a = 1*u.AU
+
+for xprime in xprimelist:
+    func = pseudoIsotherm(xprime,lam,re,rc,N0,D,a)
+    x,count = rf.bisect(func,-1,5,threshold=0.0001*u.AU)
+    xlist.append(x)
+
+yprimelist = np.zeros(len(xlist))
+ylist = np.full(len(xprimelist),2e8)
+
+plt.figure("Pseudo-Isotherm")
+plt.title("Pseudo-Isotherm")
+plt.xlabel("x' (AU)")
+plt.ylabel("D (AU)")
+for i in range(0,len(xlist)):
+    xl = [xprimelist[i]/u.AU,xlist[i]]
+    yl = [yprimelist[i],ylist[i]-np.exp(-1*((xlist[i]-1)/0.25)**2)] #The gaussian here is just for visual
+    plt.plot(xl,yl,color='blue')
+plt.savefig("PseudoIsotherm.pdf")
+plt.savefig("PseudoIsotherm.png")
