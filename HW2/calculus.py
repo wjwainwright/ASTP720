@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
 
 def differentiate(xarr,yarr):
+    """
+    Symmetric difference numerical differentiation function
+    
+    Args:
+        xarr: Input array of x-values used to construct the numerical derivative
+        yarr: Input array of y-values used to construct the numerical derivative
+    Returns:
+        Returns a funcion in the form of f(x) which in turn returns the numerical
+        derivative at the point x based on the input xarr and yarr
+    """
     def subFunc(x):
         try:
             i = xarr.index(x)
@@ -19,6 +29,15 @@ def differentiate(xarr,yarr):
     return subFunc
 
 def midpointInt(func):
+    """
+    Midpoint method numerical integration method
+    
+    Args:
+        func: Takes a function f(x) for the purpose of finding the numerical derivative
+    Returns:
+        Returns a function f(a,b) which in turn returns the numerical integral of f(x)
+        over the interval (a,b) using the midpoint method
+    """
     def subFunc(a,b):
         import numpy as np
         
@@ -32,6 +51,15 @@ def midpointInt(func):
     return subFunc
 
 def trapezoidInt(func):
+    """
+    Trapezoid method numerical integration method
+    
+    Args:
+        func: Takes a function f(x) for the purpose of finding the numerical derivative
+    Returns:
+        Returns a function f(a,b) which in turn returns the numerical integral of f(x)
+        over the interval (a,b) using the trapezoid method
+    """
     def subFunc(a,b):
         import numpy as np
         
@@ -45,8 +73,17 @@ def trapezoidInt(func):
     return subFunc
 
 def simpsonInt(func):
+    """
+    Simpson's rule numerical integration method
+    
+    Args:
+        func: Takes a function f(x) for the purpose of finding the numerical derivative
+    Returns:
+        Returns a function f(a,b) which in turn returns the numerical integral of f(x)
+        over the interval (a,b) using Simpson's rule
+    """
     def subFunc(a,b):
-        return
+        return (b-a)/6*(func(a)+4*func((a+b)/2)+func(b))
     return subFunc
 
 

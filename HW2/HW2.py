@@ -15,10 +15,17 @@ yarr = [testFunc(x) for x in xarr]
 diff = calc.differentiate(xarr,yarr)
 print(diff(19.9))
 
+a=-4
+b=-20
+
 #Midpoint Integral
 mp = calc.midpointInt(testFunc)
-print(mp(-4,17))
+print(mp(a,b))
 
 #Trapezoid Integral
 trap = calc.trapezoidInt(testFunc)
-print(trap(-4,17))
+print(trap(a,b))
+
+#Simpson Integral
+sim = calc.simpsonInt(testFunc)
+print(sim(a,b))
