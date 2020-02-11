@@ -111,3 +111,36 @@ class matrix:
         ans = np.delete(self.values,r,0)
         ans = np.delete(ans,c,1)
         return matrix(self.m-1,self.n-1,ans,mode='numpy')
+    
+    def invert(self):
+        ans = matrix(self.m,self.n)
+        det = self.determinant()
+        
+        for r in range(self.m):
+            for c in range(self.n):
+                ans.values[r,c] = (-1)**(r+c) * self.residual(r,c).determinant() / det
+        
+        return ans
+    
+    def luDecomp(self):
+        l = matrix(self.m,self.n)
+        u = matrix(self.m,self.n)
+        
+        for j in range(self.n):
+            
+            l.values[j,j] = 1
+            
+            for i in range(j+1):
+                u.values[i,j] = 1/l.values[i,i] * ( self.values[i,j] - sum([l.values[i,k]*u.values[k,j] for k in range(i)]) )
+            for i in range(j,self.n):
+                l.values[i,j] = 1/u.values[j,j] * ( self.values[i,j] - sum([l.values[i,k]*u.values[k,j] for k in range(j)]) )
+            
+        return l,u
+
+    def luDeterminant(self):
+        l,u = self.luDecomp()
+
+        return np.prod([u.values[i,i] for i in range(u.n)])
+    
+        
+    
