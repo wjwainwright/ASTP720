@@ -65,7 +65,7 @@ def rho(rs):
 #rs = r200/c
 
 cList = [15,20]
-v200List = [150,200] * units.km / units.s
+v200List = [100,150,200,250,300] * units.km / units.s
 
 r200 = 230 * units.kpc
 G = 6.67e-11 * units.m**3 * units.kg**-1 * units.s**-2
@@ -84,35 +84,50 @@ for c in cList:
         
         pointList = np.arange(10,350,10) * units.kpc
         shell = 1 * units.kpc
-        MrList = [calc.simpsonInt(func_menc)(point-shell,point+shell) for point in pointList]
+        MrList = [func_menc(point+shell)-func_menc(point-shell) for point in pointList]
+        
+        new_pointList = [p for p in pointList]
+        new_pointList.pop(0)
+        new_pointList.pop(-1)
+        func_dmdr = calc.differentiate([p/units.kpc for p in pointList],[mr/units.solMass for mr in MrList])
+        dmdrList = [func_dmdr(p/units.kpc) for p in new_pointList]
         
         #Vc
-        plt.figure()
+        plt.figure(f"{c}_vc")
         plt.title(f"c={c}   v200={v200}   r200={r200}")
         plt.xlabel("r (kpc)")
         plt.ylabel("Vc (km/s)")
-        plt.plot([r/units.kpc for r in rList],[vc/units.km*units.s for vc in vcList])
+        plt.plot([r/units.kpc for r in rList],[vc/units.km*units.s for vc in vcList],label=rf"$V_{{200}}=${v200}")
+        plt.legend()
         plt.savefig(f"Vc_r_{c}_{int(v200/units.km*units.s)}.pdf")
         
         
         #Menc
-        plt.figure()
+        plt.figure(f"{c}_menc")
         plt.title(f"c={c}   v200={v200}   r200={r200}")
         plt.xlabel("r (kpc)")
         plt.ylabel("Menc (Solar Masses)")
-        plt.plot([r/units.kpc for r in rList],[menc/units.solMass for menc in mencList])
+        plt.plot([r/units.kpc for r in rList],[menc/units.solMass for menc in mencList],label=rf"$V_{{200}}$={v200}")
+        plt.legend()
         plt.savefig(f"Menc_r_{c}_{int(v200/units.km*units.s)}.pdf")
         
         #M(r+delta_r)
-        plt.figure()
+        plt.figure(f"{c}_mr")
         plt.title(f"c={c}   v200={v200}   r200={r200}")
         plt.xlabel("Shell Radius +/- 1 (kpc)")
-        plt.ylabel("Menc (Solar Masses)")
-        plt.plot([point/units.kpc for point in pointList],[mr/units.solMass/units.kpc for mr in MrList])
+        plt.ylabel("Mass within 1kpc shell of r (Solar Masses)")
+        plt.plot([point/units.kpc for point in pointList],[mr/units.solMass for mr in MrList],label=rf"$V_{{200}}$={v200}")
+        plt.legend()
         plt.savefig(f"Mass_shell_{c}_{int(v200/units.km*units.s)}.pdf")
         
         #M_total
-        
+        plt.figure(f"{c}_dmdr")
+        plt.title(f"c={c}   v200={v200}   r200={r200}")
+        plt.xlabel("r +/- 1 (kpc)")
+        plt.ylabel("rm/dr at radius r (Solar Masses)")
+        plt.plot([point/units.kpc for point in new_pointList],[dmdr for dmdr in dmdrList],label=rf"$V_{{200}}$={v200}")
+        plt.legend()
+        plt.savefig(f"dM_dR_{c}_{int(v200/units.km*units.s)}.pdf")
         
     
 
