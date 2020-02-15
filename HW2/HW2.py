@@ -99,7 +99,7 @@ for c in cList:
         plt.ylabel("Vc (km/s)")
         plt.plot([r/units.kpc for r in rList],[vc/units.km*units.s for vc in vcList],label=rf"$V_{{200}}=${v200}")
         plt.legend()
-        plt.savefig(f"Vc_r_{c}_{int(v200/units.km*units.s)}.pdf")
+        plt.savefig(f"Vc_r_{c}.pdf")
         
         
         #Menc
@@ -109,7 +109,7 @@ for c in cList:
         plt.ylabel("Menc (Solar Masses)")
         plt.plot([r/units.kpc for r in rList],[menc/units.solMass for menc in mencList],label=rf"$V_{{200}}$={v200}")
         plt.legend()
-        plt.savefig(f"Menc_r_{c}_{int(v200/units.km*units.s)}.pdf")
+        plt.savefig(f"Menc_r_{c}.pdf")
         
         #M(r+delta_r)
         plt.figure(f"{c}_mr")
@@ -118,16 +118,16 @@ for c in cList:
         plt.ylabel("Mass within 1kpc shell of r (Solar Masses)")
         plt.plot([point/units.kpc for point in pointList],[mr/units.solMass for mr in MrList],label=rf"$V_{{200}}$={v200}")
         plt.legend()
-        plt.savefig(f"Mass_shell_{c}_{int(v200/units.km*units.s)}.pdf")
+        plt.savefig(f"Mass_shell_{c}.pdf")
         
         #M_total
         plt.figure(f"{c}_dmdr")
         plt.title(f"c={c}   v200={v200}   r200={r200}")
         plt.xlabel("r +/- 1 (kpc)")
-        plt.ylabel("rm/dr at radius r (Solar Masses)")
+        plt.ylabel("dm/dr at radius r (Solar Masses)")
         plt.plot([point/units.kpc for point in new_pointList],[dmdr for dmdr in dmdrList],label=rf"$V_{{200}}$={v200}")
         plt.legend()
-        plt.savefig(f"dM_dR_{c}_{int(v200/units.km*units.s)}.pdf")
+        plt.savefig(f"dM_dR_{c}.pdf")
         
     
 
@@ -162,6 +162,7 @@ print(m.luDeterminant())
 assert m.luDeterminant() == m.determinant()
 inv = m.invert()
 print(inv.values)
+
 
 #5
 print("Number 5:")
