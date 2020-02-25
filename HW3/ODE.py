@@ -27,11 +27,12 @@ def euler(func,x0,y0,solvePoints,precision=3,full=False):
     for i in range(len(x)-1):
         if len(y0) ==1:
             yprime.append(func(x[i],y[i])[0])
+            y.append(y[i]+step*yprime[-1])
         else:
-            yprime.append(yprime[i] + step*func(x[i],y[i],yprime[i])[0])
-        y.append(y[i]+step*yprime[-1])
+            yprime.append(yprime[i] + step*func(x[i],y[i],yprime[i])[1])
+            y.append(y[i]+step*func(x[i],y[i],yprime[-1])[0])
     
-    
+    solvePoints = [round(a,precision) for a in solvePoints]
     y = [round(a,precision) for a in y]
     yprime = [round(a,precision) for a in yprime]
     
@@ -76,6 +77,7 @@ def heun(func,x0,y0,solvePoints,precision=3,full=False):
             y.append(c)
             yprime.append(c2)
             
+    solvePoints = [round(a,precision) for a in solvePoints]
     y = [round(a,precision) for a in y]
     yprime = [round(a,precision) for a in yprime]
     
@@ -111,7 +113,7 @@ def rk4(func,x0,y0,solvePoints,precision=3,full=False):
             k1 = func(x[i],y[i])[0]
             k2 = func(x[i]+0.5*step,y[i]+0.5*step*k1)[0]
             k3 = func(x[i]+0.5*step,y[i]+0.5*step*k2)[0]
-            k4 = func(x[i]+0.5*step,y[i]+0.5*step*k3)[0]
+            k4 = func(x[i+1],y[i]+step*k3)[0]
             
             y.append(y[i]+step/6*(k1+2*k2+2*k3+k4))
             yprime.append(k1)
@@ -127,12 +129,13 @@ def rk4(func,x0,y0,solvePoints,precision=3,full=False):
             k3 = func(x[i]+0.5*step,y[i]+0.5*step*k2,yprime[i]+0.5*step*k2p)[0]
             k3p = func(x[i]+0.5*step,y[i]+0.5*step*k2,yprime[i]+0.5*step*k2p)[1]
             
-            k4 = func(x[i]+0.5*step,y[i]+0.5*step*k3,yprime[i]+0.5*step*k3p)[0]
-            k4p = func(x[i]+0.5*step,y[i]+0.5*step*k3,yprime[i]+0.5*step*k3p)[1]
+            k4 = func(x[i+1],y[i]+step*k3,yprime[i]+step*k3p)[0]
+            k4p = func(x[i+1],y[i]+step*k3,yprime[i]+step*k3p)[1]
             
             y.append(y[i]+step/6*(k1+2*k2+2*k3+k4))
-            yprime.append(yprime[i]+step/6*(k1+2*k2p+2*k3p+k4p))
+            yprime.append(yprime[i]+step/6*(k1p+2*k2p+2*k3p+k4p))
     
+    solvePoints = [round(a,precision) for a in solvePoints]
     y = [round(a,precision) for a in y]
     yprime = [round(a,precision) for a in yprime]
     
