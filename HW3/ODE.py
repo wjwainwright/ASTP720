@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 
-def find_nearest(array, value):
-    #Imports
-    import numpy as np
-    
-    array = np.asarray(array)
-    idx = (np.abs(array - value)).argmin()
-    return array[idx]
-
 def euler(func,x0,y0,solvePoints,precision=3,full=False):
+    """
+    Euler method for solving ordinary differential equations
+    
+    Args:
+        func: Takes a function y' = f(x,y)
+        x0: Initial value for x
+        y0: Initial value for the y array at the position x, i.e. y(x0)=y0
+        solvePoints: List of x-values to return y(x) at
+        precision: Order of precision, i.e. 10^(-1*precision)
+        full: Boolean to return x,y,y' which is false by default
+    Returns:
+        Returns y(x) for all values in solvePoints by default, or the full
+        arrays of x,y,y' if full=True
+    """
     import numpy as np
     
     step = 10**(-1*precision)
@@ -19,6 +25,7 @@ def euler(func,x0,y0,solvePoints,precision=3,full=False):
     y = [y0[0]]
     ans = []
     
+    #Cut of 1.00000000000004 to 1.000
     x = [round(a,precision) for a in x]
     
     if not len(y0) == 1:
@@ -32,6 +39,7 @@ def euler(func,x0,y0,solvePoints,precision=3,full=False):
             yprime.append(yprime[i] + step*func(x[i],y[i],yprime[i])[1])
             y.append(y[i]+step*func(x[i],y[i],yprime[-1])[0])
     
+    #Cut of 1.00000000000004 to 1.000
     solvePoints = [round(a,precision) for a in solvePoints]
     y = [round(a,precision) for a in y]
     yprime = [round(a,precision) for a in yprime]
@@ -45,6 +53,21 @@ def euler(func,x0,y0,solvePoints,precision=3,full=False):
         return ans
 
 def heun(func,x0,y0,solvePoints,precision=3,full=False):
+    """
+    Heun's method for solving ordinary differential equations
+    
+    Args:
+        func: Takes a function y' = f(x,y) or y' = f(x,y1,y2)
+        x0: Initial value for x
+        y0: Initial value for the y array at the position x, i.e. y(x0)=y0
+        solvePoints: List of x-values to return y(x) at
+        precision: Order of precision, i.e. 10^(-1*precision)
+        full: Boolean to return x,y,y' which is false by default
+    Returns:
+        Returns y(x) for all values in solvePoints by default, or the full
+        arrays of x,y,y' if full=True
+    """
+    
     import numpy as np
     
     step = 10**(-1*precision)
@@ -55,6 +78,7 @@ def heun(func,x0,y0,solvePoints,precision=3,full=False):
     y = [y0[0]]
     ans = []
     
+    #Cut of 1.00000000000004 to 1.000
     x = [round(a,precision) for a in x]
     
     if not len(y0) == 1:
@@ -63,6 +87,8 @@ def heun(func,x0,y0,solvePoints,precision=3,full=False):
     for i in range(len(x)-1):
         
         if len(y0) == 1:
+            #p=predictor
+            #c=corrector
             p = y[i] + step*func(x[i],y[i])[0]
             c = y[i] + 0.5*step*(func(x[i],y[i])[0] + func(x[i+1],p)[0])
             y.append(c)
@@ -76,7 +102,8 @@ def heun(func,x0,y0,solvePoints,precision=3,full=False):
             
             y.append(c)
             yprime.append(c2)
-            
+          
+    #Cut of 1.00000000000004 to 1.000
     solvePoints = [round(a,precision) for a in solvePoints]
     y = [round(a,precision) for a in y]
     yprime = [round(a,precision) for a in yprime]
@@ -91,8 +118,24 @@ def heun(func,x0,y0,solvePoints,precision=3,full=False):
 
 
 def rk4(func,x0,y0,solvePoints,precision=3,full=False):
+    """
+    RK4 method for solving ordinary differential equations
+    
+    Args:
+        func: Takes a function y' = f(x,y) or y' = f(x,y1,y2)
+        x0: Initial value for x
+        y0: Initial value for the y array at the position x, i.e. y(x0)=y0
+        solvePoints: List of x-values to return y(x) at
+        precision: Order of precision, i.e. 10^(-1*precision)
+        full: Boolean to return x,y,y' which is false by default
+    Returns:
+        Returns y(x) for all values in solvePoints by default, or the full
+        arrays of x,y,y' if full=True
+    """
+    
     import numpy as np
     
+    #Step size
     step = 10**(-1*precision)
     
     solvePoints = sorted(solvePoints)
@@ -101,6 +144,7 @@ def rk4(func,x0,y0,solvePoints,precision=3,full=False):
     y = [y0[0]]
     ans = []
     
+    #Cut of 1.00000000000004 to 1.000
     x = [round(a,precision) for a in x]
     
     if not len(y0) == 1:
@@ -135,6 +179,7 @@ def rk4(func,x0,y0,solvePoints,precision=3,full=False):
             y.append(y[i]+step/6*(k1+2*k2+2*k3+k4))
             yprime.append(yprime[i]+step/6*(k1p+2*k2p+2*k3p+k4p))
     
+    #Cut of 1.00000000000004 to 1.000
     solvePoints = [round(a,precision) for a in solvePoints]
     y = [round(a,precision) for a in y]
     yprime = [round(a,precision) for a in yprime]
