@@ -59,31 +59,30 @@ class node:
                 self.zcom = g.z
                 self.mtot = g.mass
                 
-                return g.x,g.y,g.z,g.mass
+                return [g.x],[g.y],[g.z],[g.mass]
+            else:
+                return [],[],[],[]
         else:
-            xcom = 0
-            ycom = 0
-            zcom = 0
-            mtot = 0
+            xcom = []
+            ycom = []
+            zcom = []
+            mtot = []
             
             for ch in self.child:
                 
                 sub = ch.calc_COM()
                 
-                if sub == None:
-                    return
+                xcom.extend(a*b for a,b in zip(sub[0],sub[3]))
+                ycom.extend(a*b for a,b in zip(sub[1],sub[3]))
+                zcom.extend(a*b for a,b in zip(sub[2],sub[3]))
+                mtot.extend(sub[3])
                 
-                xcom += sub[0]*sub[3]
-                ycom += sub[1]*sub[3]
-                zcom += sub[2]*sub[3]
-                mtot += sub[3]
-                
-            self.xcom = xcom / mtot
-            self.ycom = ycom / mtot
-            self.zcom = zcom / mtot
-            self.mtot = mtot
+            self.xcom = sum(xcom) / sum(mtot)
+            self.ycom = sum(ycom) / sum(mtot)
+            self.zcom = sum(zcom) / sum(mtot)
+            self.mtot = sum(mtot)
         
-            return self.xcom,self.ycom,self.zcom,self.mtot
+            return [self.xcom],[self.ycom],[self.zcom],[self.mtot]
     
     
     
@@ -285,11 +284,11 @@ series = [tree(xmin,xmax,ymin,ymax,zmin,zmax) for a in time]
 
 for g in cl1:
     series[0].addGal(galaxy(g[0],g[1],g[2],mass),series[0].root)
-print(series[0].maxDepth)
-print(series[0].root.galCount())
+print(f"Tree node depth from 0(root): {series[0].maxDepth}")
+print(f"Number of galaxies: {series[0].root.galCount()}")
 cList = series[0].toList()
-print(len(cList))
-print(series[0].root.calc_COM())
+print(f"Number of nodes: {len(cList)}")
+print(f"Total COM: {series[0].root.calc_COM()}")
 
 series[0].plot()
 
