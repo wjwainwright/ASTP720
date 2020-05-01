@@ -94,12 +94,20 @@ spirals = []
 ellipticals = []
 dwarves = []
 
+"""
+The values that I used to generate the properties for the different galaxy types were based on ballpark
+numbers for the high and low ends of these ranges. It is possible if not likely that these values are
+incorrect or misguided, but their purpose in being these is as a placeholder for a real data set.
+"""
+
 #Generate Spirals
 for i in range(Ns):
     g = spiralGalaxy(f'Spiral_{i:03d}',np.random.uniform(1e19,10e20),np.random.uniform(1e18,10e18),np.random.uniform(400000,700000),np.random.randint(3,10))
     g.calcMass()
     g.calcVolume()
     g.calcDensity()
+    
+    #Random position in a box/cluster
     spirals.append([g,np.random.uniform(-2e20,2e20),np.random.uniform(-2e20,2e20)])
     assert not g.density == None
 
@@ -109,7 +117,11 @@ for i in range(Ne):
     g.calcMass()
     g.calcVolume()
     g.calcDensity()
+    
+    #Random position in a box/cluster
     ellipticals.append([g,np.random.uniform(-2e20,2e20),np.random.uniform(-2e20,2e20)])
+    
+    #Make sure that the values calculated correctly
     assert not g.density == None
     
 #Generate Dwarf Spheroidals
@@ -118,6 +130,8 @@ for i in range(Nds):
     g.calcMass()
     g.calcVolume()
     g.calcDensity()
+    
+    #Random position in a box/cluster
     dwarves.append([g,np.random.uniform(-2e20,2e20),np.random.uniform(-2e20,2e20)])
     assert not g.density == None
 
@@ -128,6 +142,7 @@ plt.scatter([a[1] for a in spirals],[a[2] for a in spirals],label='Spirals')
 plt.scatter([a[1] for a in ellipticals],[a[2] for a in ellipticals],label='Ellipticals',color='red')
 plt.scatter([a[1] for a in dwarves],[a[2] for a in dwarves],label='Dwarf Spheroidals',color='orange')
 plt.legend()
+plt.savefig('cluster.pdf')
 
 
 plt.figure()
@@ -138,6 +153,7 @@ plt.scatter([a[1] for a in dwarves],[a[2] for a in dwarves],label='Dwarf Spheroi
 plt.set_cmap('brg')
 clb = plt.colorbar()
 clb.ax.set_title("Density")
+plt.savefig('density.pdf')
 
 
 
