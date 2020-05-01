@@ -14,6 +14,7 @@ plt.plot(days,data)
 plt.title('Raw Data')
 plt.xlabel('Days')
 plt.ylabel('Strain h')
+plt.savefig('strain.pdf')
 
 #Sampling rate and Nyquist frequency
 Fs = abs(1/(seconds[1]-seconds[0]))
@@ -30,6 +31,7 @@ plt.figure()
 plt.plot(np.log10(freq),np.log10(p))
 plt.xlabel('$Log_{10}(ƒ)$ ')
 plt.ylabel('$Log_{10}$ of Power Spectrum')
+plt.savefig('fft.pdf')
 
 
 pts = []
@@ -38,8 +40,18 @@ for i in np.log10(p):
         pts.append(i)
 index = np.where(np.log10(p) == pts[-1])[0]
 
-#Log10(f_GW), Log10(Power Spectrum), Day, Strain
-print(np.log10(freq)[index],np.log10(p)[index],days[index],data[index])
+#Log10(f_GW), Log10(Power Spectrum)
+print(np.log10(freq)[index],np.log10(p)[index])
 
-#2 equations, 2 unknowns
+fgw = 10**np.log10(freq)[index]
+h = p[int(index)]**0.5
+D = 12
 
+a0 = 2.6e-21
+b0 = 10e-4
+
+M = (b0**2/fgw**2 * (D*h/a0)**3)**(1/5)
+R = a0*M**2/(D*h)
+
+print(f'Mass: {float(M.real)} Solar Masses')
+print(f'Separation: {float(R.real)} Solar Radii')
